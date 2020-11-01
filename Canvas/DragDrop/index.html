@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drag and Drop</title>
+    <script src="main.js" defer></script>
+  </head>
+  <style>
+    body {
+      background-color: green;
+    }
+    #case1,
+    #case2,
+    #case3,
+    #case4 {
+      width: 200px;
+      height: 120px;
+      border: 1px solid black;
+      background-color: white;
+      padding: 2px;
+      margin: 5px;
+      float: left;
+    }
+    #case5,
+    #case6,
+    #case7,
+    #case8 {
+      width: 200px;
+      height: 120px;
+      border: 1px solid black;
+      padding: 2px;
+      margin: 5px;
+      float: inline-start;
+      background-color: gray;
+    }
+    img {
+      width: 200px;
+      height: 120px;
+    }
+    #case1:hover {
+      border: 1px dashed blue;
+    }
+  </style>
+  <body>
+    <h1>Drag and Drop</h1>
+    <container>
+      <div id="case1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      <div id="case2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      <div id="case3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      <div id="case4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+      <br /><br />
+      <div id="case5" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img
+          src="./img/table.png"
+          draggable="true"
+          ondragstart="drag(event)"
+          id="drag5"
+          alt="table"
+        />
+      </div>
+
+      <div id="case6" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img
+          src="./img/cage.png"
+          draggable="true"
+          ondragstart="drag(event)"
+          id="drag6"
+          alt="cage"
+        />
+      </div>
+
+      <div id="case7" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img
+          src="./img/oiseau.png"
+          draggable="true"
+          ondragstart="drag(event)"
+          id="drag7"
+          alt="oiseau"
+        />
+      </div>
+
+      <div id="case8" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img
+          src="./img/ordinateur.png"
+          draggable="true"
+          ondragstart="drag(event)"
+          alt="ordinateur"
+          id="drag8"
+        />
+      </div>
+
+      <!-- <canvas id="myCanvas1"></canvas>
+    <canvas id="myCanvas2"></canvas>
+    <canvas
+    id="myCanvas3"
+    width="180"
+    height="70"
+    style="border: 1px solid #d3d3d3"
+    ></canvas>
+    <canvas id="myCanvas4" width="260" height="120"
+    style="border:1px solid #d3d3d3;">-->
+    </container>
+  </body>
+</html>

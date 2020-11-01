@@ -1,0 +1,74 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Importation du système d'exploitation
+Vagrant.configure("2") do |config|
+  
+  config.vm.box = "centos/7"
+
+# Synchronisation entre  la machine hôte et la machine virtuelle
+  config.vm.network "forwarded_port", guest: 8080, host: 8080  #Port pour Jenkins
+  config.vm.network "forwarded_port", guest: 80, host: 80   # Port pour Docker
+# Création et synchronisation entre le répertoire d'accueil de la machine hôte et la machine virtuelle
+  config.vm.synced_folder "./data", "/vagrant_data", create: true 
+
+#Configuration des ressources  et cpus de la virtual box
+  # config.vm.provider "virtualbox" do |vb|
+
+      # vb.memory = "12000"
+	  # vb.cpus = "2"
+	  
+  # end
+  
+# Provisionnement via ligne de commande
+  config.vm.provision "shell", inline: <<-SHELL
+  
+# Installation de java  
+    sudo yum update
+    sudo yum install -y java-1.8.0-openjdk-devel 
+    
+  # Installation d'Ansible
+  sudo "https://bootrstrap.pypa.io/get-pip.py" -o "get-pip.py"
+  python get-pip
+  sudo yum -y install git
+  cd /usr/src/
+  sudo git clone https://github.com/ansible/ansible.git --recursive
+  cd ./ansible
+  source ./hacking/env-setup
+  pip install -r ./requirements.txt
+  sudo python -m easy_install --upgrade py OpenSSL
+  #Script d'installation automatique pour Centos ou Ubuntu
+  #curl -L https://git.io/fjWan -o  install-ansible.sh && bash -x install-ansible.sh
+
+  #Configuration d'ansible
+  #mkdir -p /etc/ansible/hosts
+  #vim  /etc/ansible/hosts
+  
+  
+  # Installation  et configuration de Maven 
+    curl -s -LO https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+    tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+    echo 'export MAVEN_HOME=/opt/apache-maven-3.6.3' > /etc/profile.d/mvn.sh
+    echo 'export PATH=$PATH:$MAVEN_HOME/bin' >> /etc/profile.d/mvn.sh
+    
+ # Installation et configuration de jenkins 
+    curl -s -LO http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+    mkdir -p /usr/lib/jenkins
+    mv jenkins.war /usr/lib/jenkins/jenkins.war
+    mkdir -p /data/
+    useradd --system -md /data/jenkins jenkins
+    echo -e '[Unit]\nDescription=Jenkins Daemon\nAfter=network.target\n\n[Service]\nType=simple\nEnvironment="JENKINS_HOME=/data/jenkins"\nExecStart=/usr/bin/java -jar /usr/lib/jenkins/jenkins.war\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/jenkins.service
+    systemctl daemon-reload
+    systemctl start jenkins.service
+    systemctl status jenkins.service
+    systemctl enable jenkins.service
+    
+ # Installation facultative et configuration de docker
+   sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+   sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+   sudo yum install -y docker-ce docker-ce-cli containerd.io
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   sudo usermod -aG docker vagrant
+  SHELL
+end

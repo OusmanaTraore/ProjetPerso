@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Localisation</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <!-- <script src="api.js"></script> -->
+    <style>
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 300px;
+        margin-top: 45px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <div id="map"></div>
+
+  <script>
+    //Leaflet
+    const center = {
+      lat: 48.8911002,
+      lng: 2.2258313999999997,
+    };
+
+    const baseSiren =
+      "Access-Control-Allow-Origin: https://opendata.hauts-de-seine.fr/api/records/1.0/search/?dataset=fr-229200506-base-sirene-v3&q=&facet=statutdiffusionetablissement&facet=trancheeffectifsetablissement&facet=etablissementsiege&facet=libellecommuneetablissement&facet=etatadministratifetablissement&facet=nomenclatureactiviteprincipaleetablissement&facet=caractereemployeuretablissement&facet=departementetablissement&facet=regionetablissement&facet=sectionetablissement&facet=classeetablissement&facet=unitepurgeeunitelegale&facet=sexeunitelegale&facet=trancheeffectifsunitelegale&facet=categorieentreprise&facet=sectionunitelegale&facet=classeunitelegale&facet=naturejuridiqueunitelegale&refine.trancheeffectifsetablissement=0+salari%C3%A9";
+
+    fetch(baseSiren).then((res) => {
+      console.log(res);
+
+      if (res.ok) {
+        res.json();
+      } else {
+        console.log("APi introuvable !");
+        document.innrHTML = " ERREUR :(";
+      }
+    });
+  </script>
+</html>

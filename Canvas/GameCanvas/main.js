@@ -57,8 +57,20 @@ function draw() {
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
   }
-  if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+  // if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+  //   dy = -dy;
+  // }
+  if (y + dy < ballRadius) {
     dy = -dy;
+  } else if (y + dy > canvas.height - ballRadius) {
+    //faire rebondir la balle sur la raquete
+    if (x > paddleX && x < paddleX + paddleWidth) {
+      dy = -dy;
+    } else {
+      alert("GAME OVER");
+      document.location.reload();
+      clearInterval(interval); // Needed for Chrome to end game
+    }
   }
   if (rightPressed) {
     paddleX += 7;
@@ -76,4 +88,4 @@ function draw() {
 }
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-setInterval(draw, 30);
+var interval = setInterval(draw, 10);
